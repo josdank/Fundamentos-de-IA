@@ -4,7 +4,7 @@
   "metadata": {
     "colab": {
       "provenance": [],
-      "authorship_tag": "ABX9TyOlckfVvD37Em130NsVMQYe",
+      "authorship_tag": "ABX9TyMRND/Z3Tq0LHx6o00jrxRG",
       "include_colab_link": true
     },
     "kernelspec": {
@@ -28,25 +28,43 @@
     },
     {
       "cell_type": "code",
-      "execution_count": null,
+      "execution_count": 5,
       "metadata": {
         "colab": {
-          "base_uri": "https://localhost:8080/",
-          "height": 211
+          "base_uri": "https://localhost:8080/"
         },
         "id": "iUDuepeZISE5",
-        "outputId": "455aac52-025b-41b2-cd33-56109cacf60d"
+        "outputId": "64789fa1-1e08-4d6c-b97d-4764f9cdc3e5"
       },
       "outputs": [
         {
-          "output_type": "error",
-          "ename": "NameError",
-          "evalue": "name '__file__' is not defined",
-          "traceback": [
-            "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
-            "\u001b[0;31mNameError\u001b[0m                                 Traceback (most recent call last)",
-            "\u001b[0;32m<ipython-input-1-3f3c091dcbe5>\u001b[0m in \u001b[0;36m<cell line: 0>\u001b[0;34m()\u001b[0m\n\u001b[1;32m      6\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m      7\u001b[0m \u001b[0;31m# 1. Cargar el dataset con manejo de rutas\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m----> 8\u001b[0;31m \u001b[0mscript_dir\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mos\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mpath\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mdirname\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mos\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mpath\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mabspath\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0m__file__\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m      9\u001b[0m \u001b[0mcsv_path\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mos\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mpath\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mjoin\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mscript_dir\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m\"premier-player-23-24.csv\"\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     10\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n",
-            "\u001b[0;31mNameError\u001b[0m: name '__file__' is not defined"
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "\n",
+            "Distribución de categorías:\n",
+            "Categoria\n",
+            "Malo      127\n",
+            "Normal     70\n",
+            "Bueno      20\n",
+            "Name: count, dtype: int64\n",
+            "\n",
+            "Precisión del modelo: 1.00\n",
+            "\n",
+            "Ingresa las estadísticas de un nuevo delantero:\n",
+            "Goles en la temporada: 15\n",
+            "Asistencias en la temporada: 20\n",
+            "\n",
+            "Delantero Estrella: Percentil 75+ (G+A > 16.0)\n",
+            "Detalles: 15.0 Goles | 20.0 Asistencias | Total: 35.0\n"
+          ]
+        },
+        {
+          "output_type": "stream",
+          "name": "stderr",
+          "text": [
+            "/usr/local/lib/python3.11/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but StandardScaler was fitted with feature names\n",
+            "  warnings.warn(\n"
           ]
         }
       ],
@@ -55,17 +73,14 @@
         "from sklearn.model_selection import train_test_split\n",
         "from sklearn.preprocessing import StandardScaler\n",
         "from sklearn.neighbors import KNeighborsClassifier\n",
-        "import os\n",
         "\n",
-        "# 1. Cargar el dataset con manejo de rutas\n",
-        "script_dir = os.path.dirname(os.path.abspath(__file__))\n",
-        "csv_path = os.path.join(script_dir, \"premier-player-23-24.csv\")\n",
+        "# 1. Cargar el dataset desde GitHub (RAW URL)\n",
+        "csv_url = \"https://raw.githubusercontent.com/josdank/Fundamentos-de-IA/Deberes/premier-player-23-24.csv\"\n",
         "\n",
         "try:\n",
-        "    df = pd.read_csv(csv_path, encoding='latin1')\n",
-        "except FileNotFoundError:\n",
-        "    print(f\"\\nERROR: Archivo no encontrado en: {csv_path}\")\n",
-        "    print(\"Archivos disponibles:\", os.listdir(script_dir))\n",
+        "    df = pd.read_csv(csv_url, encoding='latin1')\n",
+        "except Exception as e:\n",
+        "    print(f\"\\nERROR al cargar el archivo desde GitHub: {e}\")\n",
         "    exit()\n",
         "\n",
         "# 2. Filtrar jugadores FW (delanteros)\n",
@@ -81,15 +96,15 @@
         "try:\n",
         "    # Intentar con cuantiles\n",
         "    df_fw[\"Categoria\"] = pd.qcut(df_fw[\"Total_Contrib\"],\n",
-        "                            q=[0, 0.25, 0.75, 1],\n",
-        "                            labels=[\"Malo\", \"Normal\", \"Bueno\"],\n",
-        "                            duplicates='drop')\n",
+        "                                 q=[0, 0.25, 0.75, 1],\n",
+        "                                 labels=[\"Malo\", \"Normal\", \"Bueno\"],\n",
+        "                                 duplicates='drop')\n",
         "except ValueError:\n",
         "    # Si falla, usar rangos fijos\n",
-        "    bins = [-1, 5, 15, 100]  # Ajustar según análisis real\n",
+        "    bins = [-1, 5, 15, 100]\n",
         "    df_fw[\"Categoria\"] = pd.cut(df_fw[\"Total_Contrib\"],\n",
-        "                            bins=bins,\n",
-        "                            labels=[\"Malo\", \"Normal\", \"Bueno\"])\n",
+        "                                bins=bins,\n",
+        "                                labels=[\"Malo\", \"Normal\", \"Bueno\"])\n",
         "\n",
         "# 4. Mostrar distribución\n",
         "print(\"\\nDistribución de categorías:\")\n",
@@ -124,7 +139,7 @@
         "        df_fw[df_fw[\"Categoria\"] == \"Bueno\"][\"Total_Contrib\"].min()\n",
         "    )\n",
         "elif prediccion == \"Normal\":\n",
-        "    msg = \"Deltantero Promedio: Entre {} y {} G+A\".format(\n",
+        "    msg = \"Delantero Promedio: Entre {} y {} G+A\".format(\n",
         "        df_fw[df_fw[\"Categoria\"] == \"Normal\"][\"Total_Contrib\"].min(),\n",
         "        df_fw[df_fw[\"Categoria\"] == \"Normal\"][\"Total_Contrib\"].max()\n",
         "    )\n",
